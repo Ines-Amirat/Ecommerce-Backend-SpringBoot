@@ -31,8 +31,8 @@ public class  User{
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role = Role.user;
+    @Column(columnDefinition = "ENUM('admin','user') DEFAULT 'user'",nullable = false)
+    private Role role ;
 
 
 }
