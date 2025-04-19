@@ -19,7 +19,7 @@ import java.util.Optional;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthService (UserRepository userRepository , PasswordEncoder passwordEncoder){
@@ -41,15 +41,18 @@ public class AuthService {
 
     }
 
-    public void login(String email , String password){
+    public User login(String email , String password){
 
         Optional<User> userOpt = userRepository.findByEmail(email);
+
         if(userOpt.isEmpty()){
             throw new UserNotFoundException("User not found");
         }
         if(!passwordEncoder.matches(password,userOpt.get().getPassword())){
             throw new InvalidPasswordException("password not correct");
         }
+        User user = userOpt.get();
+        return user ;
     }
 
 

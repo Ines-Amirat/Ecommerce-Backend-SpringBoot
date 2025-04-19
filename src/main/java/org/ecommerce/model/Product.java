@@ -26,7 +26,7 @@ public class Product {
 
     @NotNull
     @Column
-    private double Price;
+    private double price;
 
     @NotNull
     @Column
@@ -62,7 +62,6 @@ public class Product {
 
 
     public Product(){
-
     }
 
     public Product(String name,
@@ -79,7 +78,7 @@ public class Product {
 
         this.name = name;
         this.description = description;
-        this.Price = price;
+        this.price = price;
         this.stockQuantity =stockQuantity;
         this.imageURL = imageURL;
         this.oldPrice = oldPrice;

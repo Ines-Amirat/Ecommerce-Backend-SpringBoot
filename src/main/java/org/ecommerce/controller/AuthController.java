@@ -1,6 +1,7 @@
 package org.ecommerce.controller;
 
 
+import org.ecommerce.dto.user.UserResponseDTO;
 import org.ecommerce.exception.InvalidPasswordException;
 import org.ecommerce.exception.UserNotFoundException;
 import org.ecommerce.model.User;
@@ -45,26 +46,28 @@ public class AuthController  {
       }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody User user){
+    public ResponseEntity<?> login(@RequestBody User user){
 
         String email = user.getEmail();
         String password = user.getPassword();
 
-
-        Map<String,String> response = new HashMap<>();
+        Map<String,String> error = new HashMap<>();
         try {
-            authService.login(email,password);
-            response.put("message","login successfully");
-            return ResponseEntity.ok(response);
+            User userFind = authService.login(email,password);
+            UserResponseDTO userResponseDTO = new UserResponseDTO(userFind.getName(), userFind.getEmail() );
+
+            return ResponseEntity.ok(userResponseDTO);
 
         }catch(UserNotFoundException e){
-            response.put("error" , e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            error.put("error","User not found");
+            return ResponseEntity.status(404).body(error);
         }
         catch(InvalidPasswordException e){
-            response.put("error" , e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            error.put("error","Password incorrect");
+            return ResponseEntity.status(401).body(error);
         }
+
+
 
     }
 
